@@ -1,0 +1,44 @@
+logowanie
+
+rejestracja
+
+reset hasła
+
+usuwanie konta
+
+logowanie dwu etapowe
+
+motyw ( taillwind blade )
+
+admin pannel 
+- wygląd
+- bramki płatności
+- użydkownicy
+- itp
+- zarządanie cenami i produktami
+
+system alertów
+
+system ticketów
+
+sklep
+
+wirtualna waluta
+
+bramki płatności
+- paypal
+- stripe
+
+panele serwerowe
+- pterodaktyl
+
+knowlegle base
+
+wbudowana strona statusu
+
+Obsługa wielu języków
+
+auto aktualizacje
+
+integracja konsoli, menadżera plików, i całego pterodaktyla
+

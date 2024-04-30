@@ -30,6 +30,8 @@ class loginController extends Controller
 
         if($pass===$user->password){
             Auth::login($user);
+
+            $request->session()->regenerate();
             
             return redirect()->intended('/');
         }

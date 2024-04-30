@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class loginController extends Controller
 {
@@ -26,9 +27,8 @@ class loginController extends Controller
         }
 
         $pass = $request->input("password");
-        $pass = hash("sha256", $pass);
 
-        if($pass===$user->password){
+        if(Hash::check($pass, $user->password)){
             Auth::login($user);
 
             $request->session()->regenerate();

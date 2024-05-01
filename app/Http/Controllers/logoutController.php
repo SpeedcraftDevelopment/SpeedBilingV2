@@ -8,6 +8,6 @@ class logoutController extends Controller
 {
     function get(){
         Auth::logout();
-        return redirect("/");
+        return redirect(route("main"));
     }
 }

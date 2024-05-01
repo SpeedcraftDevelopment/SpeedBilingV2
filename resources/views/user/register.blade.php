@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<form action="/register" method="post">
+<form action="{{ route("user.register") }}" method="post">
     @csrf
     <label for="name">Name</label><br>
     <input type="text" name="name" id="name" required><br><br>

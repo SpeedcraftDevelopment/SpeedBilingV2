@@ -11,7 +11,7 @@ class loginController extends Controller
 {
     function get(){
         if(Auth::check()){
-            return redirect()->intended('/');
+            return redirect()->intended(route("main"));
         }
         return view("user.login");
     }
@@ -33,7 +33,7 @@ class loginController extends Controller
 
             $request->session()->regenerate();
             
-            return redirect()->intended('/');
+            return redirect()->intended(route("main"));
         }
         return back()->withErrors([
             'password' => 'The provided credentials do not match our records.',

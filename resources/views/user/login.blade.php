@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<form action="/login" method="post">
+<form action="{{ route("user.login") }}" method="post">
     @csrf
     <label for="email">E-Mail</label><br>
     <input type="email" name="email" id="email" required><br><br>

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class userController extends Controller
+class authController extends Controller
 {
     /**
      * Display a listing of the resource.

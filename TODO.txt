@@ -1,6 +1,6 @@
 +logowanie
 
-rejestracja
++rejestracja
 
 reset hasła
 

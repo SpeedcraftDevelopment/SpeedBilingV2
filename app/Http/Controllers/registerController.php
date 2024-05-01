@@ -10,7 +10,7 @@ class registerController extends Controller
 {
     function get(){
         if(Auth::check()){
-            return redirect()->intended('/');
+            return redirect()->intended(route("main"));
         }
         return view("user.register");
     }
@@ -56,6 +56,6 @@ class registerController extends Controller
 
         Auth::login($user);
 
-        return redirect("/");
+        return redirect(route("main"));
     }
 }

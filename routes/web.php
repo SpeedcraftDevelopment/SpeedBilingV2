@@ -1,20 +1,22 @@
 <?php
 
-use App\Http\Controllers\loginController;
-use App\Http\Controllers\logoutController;
-use App\Http\Controllers\registerController;
+use App\Http\Controllers\userController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    if(!Auth::check()){
+        return redirect()->route("user.login");
+    }
     return view('welcome');
 })->name("main");
 
-Route::get('/login', [loginController::class, "get"])->name("user.login");
+Route::get('/login', [userController::class, "loginPage"])->name("user.login");
 
-Route::post('/login', [loginController::class, "post"]);
+Route::post('/login', [userController::class, "login"]);
 
-Route::get("/logout", [logoutController::class, "get"])->name("user.logout");
+Route::get("/logout", [userController::class, "logout"])->name("user.logout");
 
-Route::get("/register", [registerController::class, "get"])->name("user.register");
+Route::get("/register", [userController::class, "createPage"])->name("user.register");
 
-Route::post("/register", [registerController::class, "post"]);
+Route::post("/register", [userController::class, "create"]);

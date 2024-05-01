@@ -67,7 +67,7 @@ class authController extends Controller
         if(Auth::check()){
             return redirect()->intended(route("main"));
         }
-        return view("user.register");
+        return view("auth.register");
     }
 
     public function login(Request $request){
@@ -98,7 +98,7 @@ class authController extends Controller
         if(Auth::check()){
             return redirect()->intended(route("main"));
         }
-        return view("user.login");
+        return view("auth.login");
     }
 
     /**

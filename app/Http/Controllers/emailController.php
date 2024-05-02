@@ -16,12 +16,18 @@ class emailController extends Controller
         if(!Auth::check()){
             return redirect()->route("user.login");
         }
+        if(Auth::user()->email_verified_at){
+            return redirect()->route("user.login");
+        }
         return view("auth.emailVeryfication");
     }
 
     public function sendEmail(Request $request){
         if(!Auth::check()){
             return redirect()->route("user.login");
+        }
+        if(Auth::user()->email_verified_at){
+            return redirect()->route("main");
         }
 
         $user = User::find(Auth::user()->id);
@@ -61,26 +67,31 @@ class emailController extends Controller
 
     public function verify(Request $request){
         if(!$request->has("token")){
-            return view("emails.veryficationEmailPage.blade.php", ["user" => null, "token" => null, "success"=>false, "message"=>"noToken"]);
+            return view("auth.emailVeryficationResult", ["user" => null, "token" => null, "success"=>false, "message"=>"noToken"]);
         }
         $URLtoken = $request->token;
         $token = EmailTokenVeryfication::where("token", $URLtoken)->first();
 
         if(!$token){
-            return view("emails.veryficationEmailPage.blade.php", ["user" => null, "token" => null, "success"=>false, "message"=>"tokenNotFound"]);
+            return view("auth.emailVeryficationResult", ["user" => null, "token" => null, "success"=>false, "message"=>"tokenNotFound"]);
         }
 
         $user = User::where("id", $token->user_id)->first();
 
         if(!$user){
-            return view("emails.veryficationEmailPage.blade.php", ["user" => null, "token" => null, "success"=>false, "message"=>"userNotFound"]);
+            return view("auth.emailVeryficationResult", ["user" => null, "token" => null, "success"=>false, "message"=>"userNotFound"]);
         }
 
         if(Carbon::now()->subMinutes(30)->timestamp > $token->created_at->timestamp){
-            return view("emails.veryficationEmailPage.blade.php", ["user" => $user, "token" => null, "success"=>false, "message"=>"tokenTimeOut"]);
+            return view("auth.emailVeryficationResult", ["user" => $user, "token" => null, "success"=>false, "message"=>"tokenTimeOut"]);
         }
 
-        
+        $user -> email_verified_at = Carbon::now()->timestamp;
+
+        $user->save();
+
+
+        return view("auth.emailVeryficationResult", ["user" => $user, "token" => $URLtoken, "success"=>true, "message"=>"success"]);
 
     }
 }

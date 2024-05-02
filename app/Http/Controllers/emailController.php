@@ -46,7 +46,7 @@ class emailController extends Controller
         $mail = new AccountVerificationMail($token);
         Mail::to(Auth::user())->send($mail);
 
-        return back()->with("emailStatus", "sended");
+        return redirect(route("email.veryfication-page"))->with("emailStatus", "sended");
     }
 
     private function RandomString()

@@ -99,10 +99,10 @@ class authController extends Controller
 
     public function loginPage(){
         if(Auth::check()){
+            if(Auth::user()->email_verified_at===null){
+                return redirect()->route("email.veryfication-page");
+            }
             return redirect()->intended(route("main"));
-        }
-        if(Auth::user()->email_verified_at===null){
-            return redirect()->route("email.veryfication-page");
         }
         return view("auth.login");
     }

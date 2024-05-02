@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\EmailTokenVeryfication;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailable;
@@ -16,10 +17,8 @@ class AccountVerificationMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public $code)
-    {
-        //
-    }
+    public function __construct(public EmailTokenVeryfication $token)
+    {}
 
     /**
      * Get the message envelope.
@@ -27,11 +26,8 @@ class AccountVerificationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address(env("MAIL_FROM_ADDRESS"), env("MAIL_FROM_NAME")),
-            replyTo: [
-                new Address(env("MAIL_FROM_ADDRESS"), env("MAIL_FROM_NAME")),
-            ],
-            subject: 'Account Verification',
+            from: new Address('jeffrey@example.com', 'Jeffrey Way'),
+            subject: 'Order Shipped',
         );
     }
 
@@ -41,9 +37,9 @@ class AccountVerificationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.veryfication',
+            view: 'emails.veryficationEmail',
             with: [
-                'code' => $this->code,
+                "token" => $this->token,
             ]
         );
     }

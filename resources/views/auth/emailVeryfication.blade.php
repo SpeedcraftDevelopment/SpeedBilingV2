@@ -1,9 +1,20 @@
 @extends('layouts.main')
 
 @section('title')
-    email Veryfication
+    Register
 @endsection
 
 @section('content')
-musisz potwirdzić e-maila
+Musisz potwierdzić e-maila! Aby wysłać wiadomość z linkiem kliknij przycisk poniżej! <br>
+@if (Session::has('emailStatus'))
+<div id="notification">
+    <br>
+    Wiadomość została wysłana! <button id="close" onclick="document.getElementById('notification').remove()">zamknij</button>
+</div>
+@endif
+<br>
+<form action="{{ route("email.send") }}" method="get">
+    @csrf
+    <button>Wyślij wiadomość</button>
+</form>
 @endsection

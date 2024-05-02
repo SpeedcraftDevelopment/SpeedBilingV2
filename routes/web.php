@@ -6,11 +6,11 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function (User $user) {
+Route::get('/', function () {
     if(!Auth::check()){
         return redirect()->route("user.login");
     }else{
-        if(!$user->email_verified_at){
+        if(Auth::user()->email_verified_at===null){
             return redirect()->route("email.veryfication-page");
         }
     }
@@ -28,3 +28,7 @@ Route::get("/register", [authController::class, "createPage"])->name("user.regis
 Route::post("/register", [authController::class, "create"]);
 
 Route::get("/email-veryfication", [emailController::class, "page"])->name("email.veryfication-page");
+
+Route::get("/email-account-veryfiaction", [emailController::class, 'verify'])->name("email.veryfication.link");
+
+Route::get("/email-send", [emailController::class, "sendEmail"])->name("email.send");

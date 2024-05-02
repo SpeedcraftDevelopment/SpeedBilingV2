@@ -28,3 +28,7 @@ Route::get("/register", [authController::class, "createPage"])->name("user.regis
 Route::post("/register", [authController::class, "create"]);
 
 Route::get("/email-veryfication", [emailController::class, "page"])->name("email.veryfication-page");
+
+Route::get("/email-account-veryfiaction", [emailController::class, 'verify'])->name("email.veryfication.link");
+
+Route::get("/email-send", [emailController::class, "sendEmail"])->name("email.send");

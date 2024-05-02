@@ -42,3 +42,5 @@ auto aktualizacje
 
 integracja konsoli, menadżera plików, i całego pterodaktyla
 
+na przyszłość:
+    - chat

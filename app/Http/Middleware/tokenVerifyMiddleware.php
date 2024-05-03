@@ -17,7 +17,7 @@ class tokenVerifyMiddleware
     {
 
         if (!$request->has("token")) {
-            return redirect(route("exception.badToken"))->with(["message" => "noToken"]);
+            return redirect(route("exception.badToken"). "?message=noToken");
         }
 
         $URLtoken = $request->token;
@@ -25,7 +25,7 @@ class tokenVerifyMiddleware
         $emailTokenVeryfication = EmailTokenVeryfication::where("token", $URLtoken)->first();
 
         if (!$resetPasswordToken && !$emailTokenVeryfication) {
-            return redirect(route("exception.badToken"))->with(["message" => "tokenNotFound"]);
+            return redirect(route("exception.badToken"). "?message=tokenNotFound");
         }
 
         $token = $resetPasswordToken ? $resetPasswordToken : $emailTokenVeryfication;
@@ -33,17 +33,17 @@ class tokenVerifyMiddleware
         $user = User::where("id", $token->user_id)->first();
 
         if (!$user) {
-            return redirect(route("exception.badToken"))->with(["message" => "userNotFound"]);
+            return redirect(route("exception.badToken"). "?message=userNotFound");
         }
 
         if(Auth::check()){
             if ($user->id !== Auth::user()->id) {
-                return redirect(route("exception.badToken"))->with(["message" => "tokenNotForThisUser"]);
+                return redirect(route("exception.badToken"). "?message=tokenNotForThisUser");
             }
         }
 
         if (Carbon::now()->subMinutes(30)->timestamp > $token->created_at->timestamp) {
-            return redirect(route("exception.badToken"))->with(["message" => "tokenTimeOut"]);
+            return redirect(route("exception.badToken"). "?message=tokenTimeOut");
         }
 
         return $next($request);

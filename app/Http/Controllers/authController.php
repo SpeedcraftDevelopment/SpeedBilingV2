@@ -56,6 +56,11 @@ class authController extends Controller
                 'password' => "Passwords are not the same!",
             ]);
         }
+        if (strlen($validated["password"]) >= 10 && preg_match('`[^0-9a-zA-Z]`', $validated["password"])) {
+            return back()->withErrors([
+                'password' => "Passwords need to be least 10 chearacter long, has almost one small and big letter and almost one number.",
+            ]);
+        }
 
         $user = new User();
 
@@ -118,13 +123,6 @@ class authController extends Controller
     //                                                           RESETOWANIE HASŁA
     public function resetPasswordSendEmail()
     {
-        if (!Auth::check()) {
-            return redirect()->route("user.login");
-        }
-        if (!Auth::user()->email_verified_at) {
-            return redirect()->route("email.veryfication-page");
-        }
-
         $user = Auth::user();
 
         $token = ResetPasswordToken::where("user_id", $user->id)->first();
@@ -141,19 +139,43 @@ class authController extends Controller
         }
 
         $mail = new ResetPasswordMail($token);
-        Mail::to($user)->queue($mail);
+        Mail::to($user)->send($mail);
 
         return back()->with("emailStatus", "sended");
     }
 
-    public function resetPasswordPage(){
-        if (!Auth::check()) {
-            return redirect()->route("user.login");
-        }
-        if (!Auth::user()->email_verified_at) {
-            return redirect()->route("email.veryfication-page");
+    public function resetPasswordPage()
+    {
+        return view("auth.passwordreset");
+    }
+
+    public function resetPasswordPageVerify(Request $request)
+    {
+        return view("auth.passwordresetverify", ["token" => $request->token]);
+    }
+
+    public function resetPasswordPageSubmit(Request $request)
+    {
+        if (!$request->has("newPass")) {
+            return view("auth.emailVeryficationResult", ["user" => null, "token" => null, "success" => false, "message" => "noNewPass"]);
         }
 
-        return view("auth.passwordreset");
+        $newPass = $request->newPass;
+        if (
+            strlen($newPass) >= 10 &&
+            preg_match('`[^0-9a-zA-Z]`', $newPass)
+        ) {
+            return view("auth.emailVeryficationResult", ["user" => null, "token" => null, "success" => false, "message" => "newPassNotMachPatern"]);
+        }
+
+        $user = User::find(Auth::user()->id);
+
+        $user->password = $newPass;
+
+        $user->save();
+
+        ResetPasswordToken::where("token", $request->token)->delete();
+
+        return redirect(route("main"))->with(["alert" => "Change password success!"]);
     }
 }

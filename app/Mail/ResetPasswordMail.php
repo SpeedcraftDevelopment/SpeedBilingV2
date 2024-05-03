@@ -19,9 +19,7 @@ class ResetPasswordMail extends Mailable
     public function __construct(
         public ResetPasswordToken $token
     )
-    {
-        //
-    }
+    {}
 
     /**
      * Get the message envelope.

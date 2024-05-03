@@ -26,7 +26,6 @@ class AccountVerificationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('jeffrey@example.com', 'Jeffrey Way'),
             subject: 'Order Shipped',
         );
     }

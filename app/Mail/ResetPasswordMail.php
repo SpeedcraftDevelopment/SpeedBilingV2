@@ -2,22 +2,23 @@
 
 namespace App\Mail;
 
-use App\Models\EmailTokenVeryfication;
+use App\Models\ResetPasswordToken;
 use Illuminate\Bus\Queueable;
-use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class AccountVerificationMail extends Mailable
+class ResetPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public EmailTokenVeryfication $token)
+    public function __construct(
+        public ResetPasswordToken $token
+    )
     {}
 
     /**
@@ -26,7 +27,7 @@ class AccountVerificationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Order Shipped',
+            subject: 'Reset Password Mail',
         );
     }
 
@@ -36,10 +37,8 @@ class AccountVerificationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.veryficationEmail',
-            with: [
-                "token" => $this->token,
-            ]
+            view: 'emails.resetpasswordEmail',
+            with: ["token" => $this->token]
         );
     }
 

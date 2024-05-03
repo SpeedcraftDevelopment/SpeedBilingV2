@@ -2,33 +2,25 @@
 
 use App\Http\Controllers\authController;
 use App\Http\Controllers\emailController;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\exceptionController;
+use App\Http\Middleware\accountEmailVerifyMiddleware;
+use App\Http\Middleware\authMiddleware;
 use Illuminate\Support\Facades\Route;
 
+
+require_once __DIR__ . '/user/getInOut.php';
+
+require_once __DIR__ . "/user/emailVerification.php";
+
+require_once __DIR__ . "/user/resetPassord.php";
+
+Route::group(["prefix" => "/exception",
+              "controller" => exceptionController::class], function(){
+    Route::get("/badToken", "badToken")->name("exception.badToken");
+});
+
 Route::get('/', function () {
-    if(!Auth::check()){
-        return redirect()->route("user.login");
-    }else{
-        if(Auth::user()->email_verified_at===null){
-            return redirect()->route("email.veryfication-page");
-        }
-    }
-    return view('welcome');
-})->name("main");
-
-Route::get('/login', [authController::class, "loginPage"])->name("user.login");
-
-Route::post('/login', [authController::class, "login"]);
-
-Route::get("/logout", [authController::class, "logout"])->name("user.logout");
-
-Route::get("/register", [authController::class, "createPage"])->name("user.register");
-
-Route::post("/register", [authController::class, "create"]);
-
-Route::get("/email-veryfication", [emailController::class, "page"])->name("email.veryfication-page");
-
-Route::get("/email-account-veryfiaction", [emailController::class, 'verify'])->name("email.veryfication.link");
-
-Route::get("/email-send", [emailController::class, "sendEmail"])->name("email.send");
+        return view('welcome');
+    })->
+    name("main")->
+    middleware([authMiddleware::class, accountEmailVerifyMiddleware::class]);

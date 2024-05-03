@@ -48,4 +48,8 @@ class User extends Authenticatable
     public function emailTokensVeryfications(){
         return $this->hasMany("App\Models\EmailTokenVeryfication");
     }
+
+    public function resetPasswordsTokens(){
+        return $this->hasMany("App\Models\ResetPasswordToken");
+    }
 }

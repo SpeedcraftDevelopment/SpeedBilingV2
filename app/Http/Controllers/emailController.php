@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class emailController extends Controller
 {
-    public function page(){
+    public function accountVeryficationPage(){
         if(!Auth::check()){
             return redirect()->route("user.login");
         }
@@ -22,7 +22,7 @@ class emailController extends Controller
         return view("auth.emailVeryfication");
     }
 
-    public function sendEmail(Request $request){
+    public function accountVeryficationEmailSend(Request $request){
         if(!Auth::check()){
             return redirect()->route("user.login");
         }
@@ -50,7 +50,7 @@ class emailController extends Controller
         }
         
         $mail = new AccountVerificationMail($token);
-        Mail::to(Auth::user())->send($mail);
+        Mail::to(Auth::user())->queue($mail);
 
         return redirect(route("email.veryfication-page"))->with("emailStatus", "sended");
     }
@@ -65,7 +65,7 @@ class emailController extends Controller
         return $randstring;
     }
 
-    public function verify(Request $request){
+    public function accountVeryficationVerify(Request $request){
         if(!$request->has("token")){
             return view("auth.emailVeryficationResult", ["user" => null, "token" => null, "success"=>false, "message"=>"noToken"]);
         }
